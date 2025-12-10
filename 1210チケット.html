@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garraway F | 社会課題解決アイデア分析レポート</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* パステルカラーパレット */
+            --bg-color: #fcfcfc;
+            --text-color: #5a5a5a;
+            --accent-blue: #e0f4ff;
+            --accent-blue-dark: #7bc1e8;
+            --accent-pink: #ffe6e6;
+            --accent-pink-dark: #e88d8d;
+            --accent-green: #e6ffea;
+            --accent-green-dark: #88cfa6;
+            --accent-yellow: #fff9db;
+            --accent-orange: #ffe0b2;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        /* レイアウト */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ヘッダー */
+        header {
+            text-align: center;
+            padding: 80px 0 20px;
+            background: linear-gradient(180deg, #f0f8ff 0%, rgba(255,255,255,0) 100%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #444;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #888;
+            font-weight: 500;
+        }
+
+        /* セクション共通 */
+        section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-blue-dark);
+            margin: 10px auto 0;
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+
+        /* NEW: 総数カウンターセクション */
+        .counter-section {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 60px;
+            background-image: radial-gradient(circle at center, var(--accent-yellow) 0%, transparent 70%);
+        }
+
+        .counter-box {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 30px 60px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(255, 200, 100, 0.15);
+            border: 2px solid #fff;
+        }
+
+        .counter-label {
+            font-size: 1.1rem;
+            color: #888;
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .counter-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #444;
+            line-height: 1;
+            background: linear-gradient(45deg, var(--accent-blue-dark), var(--accent-pink-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-feature-settings: "tnum";
+        }
+
+        .counter-unit {
+            font-size: 1.5rem;
+            color: #888;
+            font-weight: 700;
+            margin-left: 10px;
+            -webkit-text-fill-color: #888; /* グラデーション解除 */
+        }
+
+        /* 1. キーワード分析（バブルデザイン） */
+        .keyword-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .bubble {
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            cursor: default;
+        }
+
+        .bubble:hover {
+            transform: translateY(-5px);
+        }
+
+        .bubble.rank1 { background-color: var(--accent-pink); color: #d66; font-size: 1.3rem; }
+        .bubble.rank2 { background-color: var(--accent-blue); color: #58a; font-size: 1.1rem; }
+        .bubble.rank3 { background-color: var(--accent-green); color: #598; font-size: 1rem; }
+        .bubble.common { background-color: var(--accent-yellow); color: #b89c30; border: 2px dashed #eadca6; }
+
+        .category-tag {
+            font-size: 0.8rem;
+            display: block;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        /* 2. アイデアの類型化（ソフトバーチャート） */
+        .chart-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .bar-group {
+            margin-bottom: 25px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .bar-bg {
+            background-color: #f0f0f0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            animation: slideIn 1.5s ease-out forwards;
+            width: 0; /* アニメーション用初期値 */
+        }
+
+        @keyframes slideIn {
+            to { width: var(--percent); }
+        }
+
+        /* 3. テクノロジーと社会課題への認識（カードグリッド） */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            border-top: 5px solid transparent;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card.tech { border-color: var(--accent-blue-dark); }
+        .card.issue { border-color: var(--accent-pink-dark); }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .quote {
+            font-style: italic;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .quote::before {
+            content: "“";
+            font-size: 3rem;
+            color: #eee;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            z-index: 0;
+        }
+
+        .quote span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 50px;
+            background-color: #fff;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 80px;
+            border-top: 1px solid #eee;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .counter-number { font-size: 3.5rem; }
+            .counter-box { padding: 20px 30px; }
+            .bubble { width: 100%; text-align: center; }
+            .chart-container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <span class="subtitle">Garraway F Insight Report</span>
+            <h1>みんなの「社会課題解決」アイデア</h1>
+            <p>集まったテキストデータを分析し、未来への兆しを可視化しました。</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="counter-section">
+            <div class="counter-box">
+                <span class="counter-label">これまでに集まったアイデア総数</span>
+                <span class="counter-number">1,076<span class="counter-unit">件</span></span>
+            </div>
+            <p style="margin-top: 20px; color: #888;">一人ひとりの想いが、大きなデータベースになっています。</p>
+        </section>
+
+        <section>
+            <h2 class="section-title">✨ カテゴリ別 頻出キーワード</h2>
+            <p style="text-align: center; margin-bottom: 30px;">各カテゴリで特に多く語られた言葉たち。ここから関心の中心が見えてきます。</p>
+            
+            <div class="keyword-cloud">
+                <div class="bubble rank1">
+                    <span class="category-tag">📉 人口減少</span>
+                    AIマッチング
+                </div>
+                <div class="bubble rank2">
+                    <span class="category-tag">📉 人口減少</span>
+                    関係人口
+                </div>
+                <div class="bubble rank3">
+                    <span class="category-tag">📉 人口減少</span>
+                    リモート移住
+                </div>
+
+                <div class="bubble rank1">
+                    <span class="category-tag">🎓 教育改革</span>
+                    体験学習
+                </div>
+                <div class="bubble rank2">
+                    <span class="category-tag">🎓 教育改革</span>
+                    個の尊重
+                </div>
+
+                <div class="bubble rank1">
+                    <span class="category-tag">👵 高齢化</span>
+                    健康寿命
+                </div>
+                <div class="bubble rank2">
+                    <span class="category-tag">👵 高齢化</span>
+                    コミュニティ
+                </div>
+
+                <div class="bubble common">
+                    <span class="category-tag">🔗 カテゴリ共通の重なり</span>
+                    「つながり」「プラットフォーム」
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">💡 アイデアのカタチ（類型化）</h2>
+            <p style="text-align: center; margin-bottom: 30px;">提案されたアイデアは、どのようなアプローチで課題を解決しようとしているのでしょうか？</p>
+
+            <div class="chart-container">
+                <div class="bar-group">
+                    <div class="bar-label">
+                        <span>🤝 プラットフォーム型 (つながりを作る)</span>
+                        <span>45%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="background-color: var(--accent-blue-dark); --percent: 45%;"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 5px; color: #888;">例：スキルシェア、地域のマッチングアプリなど</p>
+                </div>
+
+                <div class="bar-group">
+                    <div class="bar-label">
+                        <span>🎁 サービス提供型 (体験を届ける)</span>
+                        <span>35%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="background-color: var(--accent-pink-dark); --percent: 35%;"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 5px; color: #888;">例：高齢者向け見守り代行、オンラインスクールなど</p>
+                </div>
+
+                <div class="bar-group">
+                    <div class="bar-label">
+                        <span>⚙️ 製品開発型 (モノで解決する)</span>
+                        <span>20%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="background-color: var(--accent-green-dark); --percent: 20%;"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 5px; color: #888;">例：自動運転バス、介護ロボットなど</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">🤖 テクノロジーと課題へのまなざし</h2>
+            <p style="text-align: center; margin-bottom: 30px;">参加者の皆さんは、テクノロジーや社会課題をどう捉えているのでしょうか。</p>
+
+            <div class="grid-cards">
+                <div class="card tech">
+                    <span class="card-icon">🚀</span>
+                    <h3>テクノロジーへの期待</h3>
+                    <p>AIやロボットは「仕事を奪うもの」ではなく、「人を助けるパートナー」として捉えられています。</p>
+                    <div class="quote">
+                        <span>「AIが事務作業を肩代わりすることで、人間はもっとクリエイティブな、温かい対話の時間を持てるようになるはず。」</span>
+                    </div>
+                </div>
+
+                <div class="card issue">
+                    <span class="card-icon">❤️</span>
+                    <h3>社会課題への意識</h3>
+                    <p>課題を「ネガティブな問題」としてだけでなく、「新しい価値を生むチャンス」と捉える傾向があります。</p>
+                    <div class="quote">
+                        <span>「過疎化は寂しいことだけれど、逆に言えば都会にはない『静寂』や『濃い人間関係』という贅沢な資源になり得る。」</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="background-color: var(--accent-yellow); padding: 40px; border-radius: 20px; text-align: center;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 20px;">🌏 全体考察</h2>
+            <p style="max-width: 700px; margin: 0 auto;">
+                今回の分析を通じて、多くの人が<strong>「テクノロジーの力で、人間らしい温かいつながりを取り戻したい」</strong>と考えていることが分かりました。<br>
+                社会課題解決の鍵は、効率化だけでなく、その先にある<strong>「コミュニティの再構築」</strong>にあるのかもしれません。
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Garraway F Data Analysis Team.</p>
+    </footer>
+
+</body>
+</html>
